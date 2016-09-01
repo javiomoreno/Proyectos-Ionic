@@ -1,0 +1,26 @@
+/* Empty. Add your own CSS if you like */
+.home{
+  background:url('../img/inicio.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+}
+
+.texto{
+  color: #4dbce9 !important;
+}
+
+.bar.bar-light {
+  background-color: rgba(255,255,255,.10); !important; /* or transparent, or background:none */
+}
+
+.login-container {
+  display: -webkit-flex;
+  -webkit-flex-direction: column;
+  height: 100%;
+}
+
+.login-container > .header {
+  -webkit-flex: 4;
+  padding-top: 20px;
+}

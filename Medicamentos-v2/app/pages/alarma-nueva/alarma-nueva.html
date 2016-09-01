@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title primary>Nueva Alarma</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding class="alarma-nueva">
+  <ion-list>
+
+    <ion-item>
+      <ion-label primary floating>Medicamento</ion-label>
+      <ion-input [(ngModel)]="medicamento"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label primary floating>Cantidad</ion-label>
+      <ion-input [(ngModel)]="cantidad"></ion-input>
+    </ion-item>
+
+    <button small (click)="saveAlarma()">Guardar</button>
+
+  </ion-list>
+</ion-content>

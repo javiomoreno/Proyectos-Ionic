@@ -1,0 +1,26 @@
+<ion-view class="home" scroll="false">
+  <ion-content class="padding" overflow-scroll="false">
+    <section class="login-container">
+      <div class = "col header text-center">
+        <img src="img/logo.png" />
+      </div>
+        <div class="col text-right">
+          <button class="button button-clear button-light" ng-click="recuperarClave()">
+            Restaurar Clave
+          </button>
+        </div>
+      <div class="list list-inset">
+        <label class="item item-input">
+          <input type="text" placeholder="DNI" ng-model="data.username">
+        </label>
+        <label class="item item-input">
+          <input type="password" placeholder="Clave" ng-model="data.password">
+        </label>
+      </div>
+      <button class="button button-block button-calm" ng-click="login()">
+        <i class="icon ion-ios-locked"></i>
+        Entrar
+      </button>
+    </section>
+  </ion-content>
+</ion-view>

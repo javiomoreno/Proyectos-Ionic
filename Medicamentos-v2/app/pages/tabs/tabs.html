@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-navbar primary>
+    <ion-buttons left>
+      <img src="build/img/icono.png" height="38"/>
+    </ion-buttons>
+    <ion-title>Medicamentos</ion-title>
+    <ion-buttons end>
+      <button (click)="openModal()">
+        <ion-icon name="options"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-tabs primary>
+  <ion-tab [root]="tab1Root" tabTitle="Alarmas" tabIcon="alarm"></ion-tab>
+  <ion-tab [root]="tab2Root" tabTitle="Buscar" tabIcon="search"></ion-tab>
+  <ion-tab [root]="tab3Root" tabTitle="Farmacias" tabIcon="medkit"></ion-tab>
+</ion-tabs>

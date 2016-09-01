@@ -1,0 +1,17 @@
+<ion-view view-title="Que Hacemos">
+  <ion-content>
+    <div class="list card">
+
+      <span ng-repeat="item in trabajos">
+        <a class="item item-avatar" href="#app/detallequehacemos/{{item.id}}">
+          <img src="{{item.imagen}}">
+          <h2>{{item.nombre}}</h2>
+          <p>{{item.descripcion}}</p>
+        </a>
+
+        <br>
+      </span>
+
+    </div>
+  </ion-content>
+</ion-view>

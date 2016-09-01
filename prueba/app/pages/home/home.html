@@ -1,0 +1,19 @@
+<ion-content padding class="home" scroll="false">
+  <div class = "col header text-center">
+    <img src="../build/img/logo.png" />
+  </div>
+  <ion-buttons end>
+    <button clear light (click)="recuperarClave()" right>Restaurar Clave</button>
+  </ion-buttons>
+  <form class="list" [ngFormModel]="loginForm" (ngSubmit)="submit()">
+    <ion-item>
+      <ion-label floating>DNI</ion-label>
+      <ion-input type="text" ngControl="dni"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Clave</ion-label>
+      <ion-input type="password" ngControl="clave"></ion-input>
+    </ion-item>
+    <button type="submit" block><ion-icon name="lock"></ion-icon>Entrar</button>
+  </form>
+</ion-content>

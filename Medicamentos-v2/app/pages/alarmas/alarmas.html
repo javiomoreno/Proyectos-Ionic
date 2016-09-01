@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="alarmas" >
+  <ion-list>
+
+    <ion-item *ngFor="#alarma of lista" (click)="viewAlarma(alarma)">
+      <ion-avatar item-left>
+        <img src="">
+      </ion-avatar>
+      <h2>{{alarma.medicamento}}</h2>
+      <h3>{{alarma.cantidad}}</h3>
+    </ion-item>
+  </ion-list>
+  <button fab fab-bottom fab-right (click)="addAlarma()" calm>
+    <ion-icon name="add"></ion-icon>
+  </button>
+</ion-content>

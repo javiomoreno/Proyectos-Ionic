@@ -1,0 +1,24 @@
+<ion-view view-title="Equipo de Trabajo">
+  <ion-content>
+    <div class="list">
+
+      <span ng-repeat="item in empleados">
+        <div ng-if="$index == 0" class="item item-divider">
+          Jefes
+        </div>
+        <div ng-if="$index == 2" class="item item-divider">
+          Ventas
+        </div>
+        <div ng-if="$index == 4" class="item item-divider">
+          Desarrollo
+        </div>
+         <a class="item item-avatar" href="#app/profile/{{item.id}}">
+            <img src="{{item.imagen}}">
+            <h2>{{item.nombre}}</h2>
+            <p>{{item.descripcion}}</p>
+          </a>
+      </span>
+
+    </div>
+  </ion-content>
+</ion-view>
