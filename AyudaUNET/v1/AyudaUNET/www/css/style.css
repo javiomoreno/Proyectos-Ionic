@@ -1,4 +1,4 @@
-/* Empty. Add your own CSS if you like */
+/* Empty. Add your own CSS if you like #387ef5*/
 
 .custom {
   background-color: #ffffff !important; /* This sets the background color*/
@@ -34,4 +34,16 @@
 .custom p,
 .custom a {
   color: white;  /*Text color for each item, overrides the color property above*/
+}
+
+i.ion-android-apps{
+  font-size: 100px;
+}
+
+i.ion-calculator{
+  font-size: 100px;
+}
+
+i.ion-archive{
+  font-size: 100px;
 }
