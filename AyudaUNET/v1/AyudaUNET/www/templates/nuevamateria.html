@@ -1,0 +1,89 @@
+<ion-view view-title="Nueva Materia">
+  <ion-content class="padding">
+
+    <div class="list">
+      <div>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Nombre de Materia</span>
+          <input type="text" placeholder="Nombre de Materia" ng-model="nueva.nombre">
+        </label>
+      </div>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          N° de Parciales
+        </div>
+        <select ng-model="nueva.cantParciales" ng-options="item.nombre for item in items">
+          <option value="">-- Seleccione --</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="row" ng-if="nueva.cantParciales.value == 1 || nueva.cantParciales.value == 2 || nueva.cantParciales.value == 3 || nueva.cantParciales.value == 4">
+      <div class="col col-50">
+        <label>Nota 1</label>
+        <label class="item item-input">
+          <input type="number" placeholder="Nota 1" ng-model="nueva.notaUno">
+        </label>
+      </div>
+      <div class="col col-50">
+        <label>Porcentaje 1</label>
+        <label class="item item-input">
+          <input type="number" placeholder="Porcentaje 1" ng-model="nueva.porceUno">
+        </label>
+      </div>
+    </div>
+
+    <div class="row" ng-if="nueva.cantParciales.value == 2 || nueva.cantParciales.value == 3 || nueva.cantParciales.value == 4">
+      <div class="col col-50">
+        <label>Nota 2</label>
+        <label class="item item-input">
+          <input type="number" placeholder="Nota 2" ng-model="nueva.notaDos">
+        </label>
+      </div>
+      <div class="col col-50">
+        <label>Porcentaje 2</label>
+        <label class="item item-input">
+          <input type="number" placeholder="Porcentaje 2" ng-model="nueva.porceDos">
+        </label>
+      </div>
+    </div>
+
+    <div class="row" ng-if="nueva.cantParciales.value == 3 || nueva.cantParciales.value == 4">
+      <div class="col col-50">
+        <label>Nota 3</label>
+        <label class="item item-input">
+          <input type="number" placeholder="Nota 3" ng-model="nueva.notaTres">
+        </label>
+      </div>
+      <div class="col col-50">
+        <label>Porcentaje 3</label>
+        <label class="item item-input">
+          <input type="number" placeholder="Porcentaje 3" ng-model="nueva.porceTres">
+        </label>
+      </div>
+    </div>
+
+    <div class="row" ng-if="nueva.cantParciales.value == 4">
+      <div class="col col-50">
+        <label>Nota 4</label>
+        <label class="item item-input">
+          <input type="number" placeholder="Nota 4" ng-model="nueva.notaCuatro">
+        </label>
+      </div>
+      <div class="col col-50">
+        <label>Porcentaje 4</label>
+        <label class="item item-input">
+          <input type="number" placeholder="Porcentaje 4" ng-model="nueva.porceCuatro">
+        </label>
+      </div>
+    </div>
+    <br>
+    <div style="text-align: center" ng-if="nueva.cantParciales.value != ''">
+      <button class="button button-positive" ng-click="insert()">
+        Guardar
+      </button>
+    </div>
+    <br>
+
+  </ion-content>
+</ion-view>

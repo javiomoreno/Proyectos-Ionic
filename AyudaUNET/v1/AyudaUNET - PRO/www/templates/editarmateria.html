@@ -1,0 +1,80 @@
+<ion-view view-title="Editar Materia">
+  <ion-content class="padding">
+
+    <div class="list">
+      <div>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Nombre de Materia</span>
+          <input type="text" placeholder="Nombre de Materia" ng-model="materia.nombre">
+        </label>
+      </div>
+    </div>
+
+    <div class="row" ng-if="materia.cant_parciales == 1 || materia.cant_parciales == 2 || materia.cant_parciales == 3 || materia.cant_parciales == 4">
+      <div class="col col-50">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Nota 1</span>
+          <input type="number" placeholder="Nota 1" ng-model="materia.notaUno">
+        </label>
+      </div>
+      <div class="col col-50">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Porcentaje 1</span>
+          <input type="number" placeholder="Porcentaje 2" ng-model="materia.porceUno">
+        </label>
+      </div>
+    </div>
+
+    <div class="row" ng-if="materia.cant_parciales == 2 || materia.cant_parciales == 3 || materia.cant_parciales == 4">
+      <div class="col col-50">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Nota 2</span>
+          <input type="number" placeholder="Nota 2" ng-model="materia.notaDos">
+        </label>
+      </div>
+      <div class="col col-50">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Porcentaje 2</span>
+          <input type="number" placeholder="Porcentaje 2" ng-model="materia.porceDos">
+        </label>
+      </div>
+    </div>
+
+    <div class="row" ng-if="materia.cant_parciales == 3 || materia.cant_parciales == 4">
+      <div class="col col-50">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Nota 3</span>
+          <input type="number" placeholder="Nota 3" ng-model="materia.notaTres">
+        </label>
+      </div>
+      <div class="col col-50">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Porcentaje 3</span>
+          <input type="number" placeholder="Porcentaje 3" ng-model="materia.porceTres">
+        </label>
+      </div>
+    </div>
+
+    <div class="row" ng-if="materia.cant_parciales == 4">
+      <div class="col col-50">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Nota 4</span>
+          <input type="number" placeholder="Nota 4" ng-model="materia.notaCuatro">
+        </label>
+      </div>
+      <div class="col col-50">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Porcentaje 4</span>
+          <input type="number" placeholder="Porcentaje 4" ng-model="materia.porceCuatro">
+        </label>
+      </div>
+    </div>
+    <br><br>
+    <div style="text-align: center" ng-if="materia.cant_parciales != ''">
+      <button class="button button-positive" ng-click="actualizar()">
+        Actualizar
+      </button>
+    </div>
+
+  </ion-content>
+</ion-view>

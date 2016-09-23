@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar primary>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Guarda tus Notas</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+
+    <ion-list-header>Semestre 2016-4</ion-list-header>
+
+    <ion-item>
+      <ion-avatar item-left>
+        <img src="build/img/materia.svg" alt="">
+      </ion-avatar>
+      <h2>Matemática I</h2>
+      <p>4 Parciales</p>
+      <ion-note item-right>3.56 pts</ion-note>
+    </ion-item>
+
+    <ion-item>
+      <ion-avatar item-left>
+        <img src="build/img/materia.png" alt="">
+      </ion-avatar>
+      <h2>Investigación de Operaciones II</h2>
+      <p>3.56 pts</p>
+    </ion-item>
+
+  </ion-list>
+  <button fab primary fab-bottom fab-right class="fab-footer" (click)="onAgregarMateria()">
+    <ion-icon name="add" is-active="false"></ion-icon>
+  </button>
+</ion-content>

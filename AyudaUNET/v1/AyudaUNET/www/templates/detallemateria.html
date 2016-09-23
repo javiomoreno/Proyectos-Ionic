@@ -1,0 +1,88 @@
+<ion-view>
+  <ion-nav-title>{{materia.nombre}}</ion-nav-title>
+  <ion-content>
+    <div class="list card">
+
+      <div class="item item-avatar">
+        <img src="img/materia.svg">
+        <h2>{{materia.nombre}}</h2>
+        <p>{{materia.acumulado}}</p>
+      </div>
+
+      <div class="item item-body">
+        <div class="row" style="border: solid 1px #dedede">
+          <div class="col col-30">
+            Nota
+          </div>
+          <div class="col col-40">
+            Porcentaje
+          </div>
+          <div class="col col-30">
+            Total
+          </div>
+        </div>
+        <div class="row" style="border: solid 1px #dedede" ng-if="materia.cant_parciales == 1 || materia.cant_parciales == 2 || materia.cant_parciales == 3 || materia.cant_parciales == 4">
+          <div class="col col-30">
+            {{materia.notaUno}}
+          </div>
+          <div class="col col-40">
+            {{materia.porceUno}} %
+          </div>
+          <div class="col col-30">
+            {{materia.totalUno}}
+          </div>
+        </div>
+        <div class="row" style="border: solid 1px #dedede" ng-if="materia.cant_parciales == 2 || materia.cant_parciales == 3 || materia.cant_parciales == 4">
+          <div class="col col-30">
+            {{materia.notaDos}}
+          </div>
+          <div class="col col-40">
+            {{materia.porceDos}} %
+          </div>
+          <div class="col col-30">
+            {{materia.totalDos}}
+          </div>
+        </div>
+        <div class="row" style="border: solid 1px #dedede" ng-if="materia.cant_parciales == 3 || materia.cant_parciales == 4">
+          <div class="col col-30">
+            {{materia.notaTres}}
+          </div>
+          <div class="col col-40">
+            {{materia.porceTres}} %
+          </div>
+          <div class="col col-30">
+            {{materia.totalTres}}
+          </div>
+        </div>
+        <div class="row" style="border: solid 1px #dedede" ng-if="materia.cant_parciales == 4">
+          <div class="col col-30">
+            {{materia.notaCuatro}}
+          </div>
+          <div class="col col-40">
+            {{materia.porceCuatro}} %
+          </div>
+          <div class="col col-30">
+            {{materia.totalCuatro}}
+          </div>
+        </div>
+        <br>
+        <br>
+        <div class="row" style="border: solid 1px #dedede">
+          <div class="col col-50" style="text-align: center">
+            Acumulado
+            <p>{{materia.acumulado}}</p>
+          </div>
+          <div class="col col-50" style="text-align: center">
+            Nota
+            <p>{{materia.notaFinal}}</p>
+          </div>
+        </div>
+        <p style="text-align: center">
+          <a class="button icon-left ion-ios-compose-outline button-clear button-positive" href="#/app/editarmateria/{{materia.id}}">Editar</a>
+          <a class="button icon-left ion-ios-trash-outline button-clear button-assertive" ng-click="showAlert()">Eliminar</a>
+        </p>
+      </div>
+
+    </div>
+  </ion-content>
+</ion-view>

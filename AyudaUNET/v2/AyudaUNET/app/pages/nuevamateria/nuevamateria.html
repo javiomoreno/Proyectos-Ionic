@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-navbar primary>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Nueva Materia</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding class="card-background-page">
+
+  <ion-list>
+
+    <ion-item>
+      <ion-label floating>Nombre de Materia</ion-label>
+      <ion-input type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Cantidad de Parciales</ion-label>
+      <ion-select [(ngModel)]="_numeroParciales">
+        <ion-option value="1">1 Parcial</ion-option>
+        <ion-option value="2">2 Parciales</ion-option>
+        <ion-option value="3">3 Parciales</ion-option>
+        <ion-option value="4">4 Parciales</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-grid>
+      <ion-row *ngIf="_numeroParciales == 1 || _numeroParciales == 2 || _numeroParciales == 3 || _numeroParciales == 4">
+        <ion-col width-50>
+          <ion-item>
+            <ion-label floating>Nota 1</ion-label>
+            <ion-input type="number" [(ngModel)]="_nota1"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col width-50>
+          <ion-item>
+            <ion-label floating>Porcentaje 1</ion-label>
+            <ion-input type="number" [(ngModel)]="_porcentaje1"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <br>
+      <ion-row *ngIf="_numeroParciales == 2 || _numeroParciales == 3 || _numeroParciales == 4">
+        <ion-col width-50>
+          <ion-item>
+            <ion-label floating>Nota 2</ion-label>
+            <ion-input type="number" [(ngModel)]="_nota2"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col width-50>
+          <ion-item>
+            <ion-label floating>Porcentaje 2</ion-label>
+            <ion-input type="number" [(ngModel)]="_porcentaje2"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <br>
+      <ion-row *ngIf="_numeroParciales == 3 || _numeroParciales == 4">
+        <ion-col width-50>
+          <ion-item>
+            <ion-label floating>Nota 3</ion-label>
+            <ion-input type="number" [(ngModel)]="_nota3"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col width-50>
+          <ion-item>
+            <ion-label floating>Porcentaje 3</ion-label>
+            <ion-input type="number" [(ngModel)]="_porcentaje3"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="_numeroParciales == 4">
+        <ion-col width-50>
+          <ion-item>
+            <ion-label floating>Nota 4</ion-label>
+            <ion-input type="number" [(ngModel)]="_nota3"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col width-50>
+          <ion-item>
+            <ion-label floating>Porcentaje 4</ion-label>
+            <ion-input type="number" [(ngModel)]="_porcentaje3"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <br>
+    <div style="text-align: center" *ngIf="_numeroParciales == 1 || _numeroParciales == 2 || _numeroParciales == 3 || _numeroParciales == 4">
+      <button primary (click)="onGuardar()">Guardar</button>
+    </div>
+  </ion-list>
+
+</ion-content>

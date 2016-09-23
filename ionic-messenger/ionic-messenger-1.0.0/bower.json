@@ -1,0 +1,9 @@
+{
+  "name": "ionic-messenger",
+  "description": "Ionic Messenger Starter",
+  "author": "Sinan Bolel <sinanbolel@gmail.com>",
+  "devDependencies": {},
+  "dependencies": {
+    "ionic": "~1.2.1"
+  }
+}

@@ -1,0 +1,54 @@
+<ion-view view-title="¿Cuánto me Falta?">
+  <ion-content>
+    <div class="list">
+      <div class="row">
+        <div class="col col-50">
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Nota 1</span>
+            <input type="number" placeholder="Nota 1">
+          </label>
+        </div>
+        <div class="col col-50">
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Porcentaje 1</span>
+            <input type="number" placeholder="Porcentaje 1">
+          </label>
+        </div>
+      </div>
+      <br>
+      <div class="row" ng-if="id == 3 || id == 4">
+        <div class="col col-50">
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Nota 2</span>
+            <input type="number" placeholder="Nota 2">
+          </label>
+        </div>
+        <div class="col col-50">
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Porcentaje 2</span>
+            <input type="number" placeholder="Porcentaje 2">
+          </label>
+        </div>
+      </div>
+      <br>
+      <div class="row" ng-if="id == 4">
+        <div class="col col-50">
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Nota 3</span>
+            <input type="number" placeholder="Nota 3">
+          </label>
+        </div>
+        <div class="col col-50">
+          <label class="item item-input item-floating-label">
+            <span class="input-label">Porcentaje 3</span>
+            <input type="number" placeholder="Porcentaje 3">
+          </label>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div style="text-align: center">
+      <button class="button button-positive" ng-click="onCalcular()">Calcular</button>
+    </div>
+  </ion-content>
+</ion-view>
