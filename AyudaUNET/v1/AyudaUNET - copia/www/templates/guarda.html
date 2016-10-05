@@ -1,0 +1,27 @@
+<ion-view view-title="Guarda tus Notas">
+  <ion-nav-buttons side="right">
+    <button class="button button-icon button-clear ion-android-more-vertical" id="menu-popover" ng-click="popover.show($event)"></button>
+  </ion-nav-buttons>
+  <ion-floating-button  ng-if="semestre.nombre != ''" click="onNuevaMateria()" has-footer="false" icon="ion-plus-round" button-color="#387ef5" iconColor="#fff"></ion-floating-button>
+  <!--<ion-floating-menu menu-color="#387ef5" menu-open-color="#387ef5">
+    <ion-floating-item icon="ion-ios-paper" click="myEvent()" button-color="#387ef5"></ion-floating-item>
+    <ion-floating-item icon="ion-ios-list-outline" click="myEvent()" button-color="#387ef5"></ion-floating-item>
+  </ion-floating-menu>-->
+  <ion-content>
+    <div class="list">
+
+      <div class="item item-divider" ng-if="semestre.nombre != ''">
+        Semestre: {{semestre.nombre}}
+      </div>
+
+      <a class="item item-avatar" ng-repeat="item in materias.vector track by $index" href="#app/detallemateria/{{item.id}}">
+        <img src="img/materia.svg">
+        <h2>{{item.nombre}}</h2>
+        <p ng-if="item.acumulado >= 4.5" style="color: green">{{item.acumulado}}</p>
+        <p ng-if="item.acumulado < 4.5" style="color: red">{{item.acumulado}}</p>
+      </a>
+
+    </div>
+  </ion-content>
+
+</ion-view>

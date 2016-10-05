@@ -1,0 +1,63 @@
+<ion-view view-title="¿Cuánto me Falta?">
+  <ion-nav-buttons side="right">
+    <button class="button button-icon button-clear ion-android-more-vertical" id="menu-popover" ng-click="popover.show($event)"></button>
+  </ion-nav-buttons>
+  <ion-content>
+    <div class="list">
+      <div class="card">
+        <div class="item item-text-wrap" style="text-align: center">
+          Ingrese los datos para calcular cuanto falta para pasar la materia.
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-50">
+          <label>Nota 1</label>
+          <label class="item item-input">
+            <input type="number" ng-model="materia.notaUno" placeholder="Nota 1">
+          </label>
+        </div>
+        <div class="col col-50">
+          <label>Porcentaje 1</label>
+          <label class="item item-input">
+            <input type="number" ng-model="materia.porceUno" placeholder="Porcentaje 1">
+          </label>
+        </div>
+      </div>
+      <br>
+      <div class="row" ng-if="materia.cantParciales == 3 || materia.cantParciales == 4">
+        <div class="col col-50">
+          <label>Nota 2</label>
+          <label class="item item-input">
+            <input type="number" ng-model="materia.notaDos" placeholder="Nota 1">
+          </label>
+        </div>
+        <div class="col col-50">
+          <label>Porcentaje 2</label>
+          <label class="item item-input">
+            <input type="number" ng-model="materia.porceDos" placeholder="Porcentaje 2">
+          </label>
+        </div>
+      </div>
+      <br>
+      <div class="row" ng-if="materia.cantParciales == 4">
+        <div class="col col-50">
+          <label>Nota 3</label>
+          <label class="item item-input">
+            <input type="number" ng-model="materia.notaTres" placeholder="Nota 3">
+          </label>
+        </div>
+        <div class="col col-50">
+          <label>Porcentaje 3</label>
+          <label class="item item-input">
+            <input type="number" ng-model="materia.porceTres" placeholder="Porcentaje 3">
+          </label>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div style="text-align: center">
+      <button class="button button-positive" ng-click="onCalcular()">Calcular</button>
+    </div>
+    <br>
+  </ion-content>
+</ion-view>

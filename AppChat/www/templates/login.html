@@ -1,0 +1,31 @@
+<ion-view style="" id="page5" title="Iniciar Sesión" hide-back-button="true" class="bar-dark">
+    <ion-content class="has-header padding">
+
+      <div style="height: 10px;" class="spacer"></div>
+      <p style="text-align: center">
+        <img src="img/ionic.png" alt="">
+      </p>
+      <form style="" class="list">
+        <div class="list card">
+          <div class="item item-body">
+
+              <label style="" class="item item-input">
+                  <input ng-model="user.jid" placeholder="Usermane" type="text">
+              </label>
+
+              <label style="" class="item item-input">
+                  <input ng-model="user.pass" placeholder="Password" type="password">
+              </label>
+            <br>
+            <button  class="button button-block button-positive" id="login-button" ng-click="login(user)" >Entrar</button>
+          </div>
+        </div>
+
+        <div style="height: 10px;" class="spacer"></div>
+        <p style="text-align: center">
+          <button  class="button button-outline button-small icon-left ion-person-add button-positive" id="register-button" ng-click="goToRegister()" >Registrar</button>
+        </p>
+      </form>
+
+    </ion-content>
+</ion-view>

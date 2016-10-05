@@ -1,0 +1,33 @@
+<ion-view view-title="Tabla de Conversión">
+  <ion-nav-buttons side="right">
+    <button class="button button-icon button-clear ion-android-more-vertical" id="menu-popover" ng-click="popover.show($event)"></button>
+  </ion-nav-buttons>
+  <ion-content class="padding" scroll="false" class="page1">
+
+    <div class="list">
+      <div class="card">
+        <div class="item item-text-wrap" style="text-align: center">
+          Ingrese la nota de 1 a 100 para calcular.
+        </div>
+      </div>
+      <br><br>
+      <div class="row">
+          <div class="col col-20">
+          </div>
+          <div class="col col-60">
+            <label>Nota a Calcular</label>
+            <label class="item item-input">
+              <input type="number" placeholder="Nota a Calcular" ng-model="_notaCalcular">
+            </label>
+          </div>
+        <div class="col col-20">
+        </div>
+    </div>
+    <div style="text-align: center">
+      <button class="button button-positive" ng-click="showAlert(_notaCalcular)">
+        Calcular
+      </button>
+    </div>
+
+  </ion-content>
+</ion-view>
