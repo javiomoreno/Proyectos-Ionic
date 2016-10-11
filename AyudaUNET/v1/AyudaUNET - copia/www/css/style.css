@@ -390,3 +390,7 @@ i.icon{
   padding-top: 1px !important;
   height: 180px !important;
 }
+
+.badge{
+  right: 15px !important;
+}

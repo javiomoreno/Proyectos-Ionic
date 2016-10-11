@@ -1,7 +1,7 @@
 /**
  * Created by Javier Moreno on 4 oct 2016.
  */
-app.controller('GuardaCtrl', function($scope, $state, $cordovaSQLite, $ionicPopover, $rootScope, $ionicHistory, $ionicPopup, $ionicLoading) {
+app.controller('GuardaCtrl', function($scope, $state, $cordovaSQLite, $ionicPopover, $rootScope, $ionicHistory, $ionicPopup, $ionicLoading, Semestres, Materias) {
 
   // .fromTemplate() method
   var template = '<ion-popover-view>' +
@@ -33,19 +33,18 @@ app.controller('GuardaCtrl', function($scope, $state, $cordovaSQLite, $ionicPopo
 
   $scope.showAlert = function() {
 
-    $scope.data = {};
+    $scope.semestre = [];
 
     $ionicHistory.nextViewOptions({
       disableBack: true
     });
-
-    $scope.data = {};
-
     // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
-      template: '<input type="text" ng-model="data.semestre" required>',
+      template: '<label class="item item-input">'+
+                  '<input type="text" placeholder="Nuevo Semestre" ng-model="semestre.nombre">'+
+                '</label>',
       title: 'Nombre de Semestre Nuevo',
-      subTitle: 'Formato xxxx-x',
+      subTitle: 'Formato XXXX-X',
       scope: $scope,
       buttons: [
         {text: 'Cancelar'},
@@ -53,18 +52,12 @@ app.controller('GuardaCtrl', function($scope, $state, $cordovaSQLite, $ionicPopo
           text: '<b>Guardar</b>',
           type: 'button-positive',
           onTap: function (e) {
-            if (!$scope.data.semestre) {
+            if (!$scope.semestre.nombre) {
               console.log("vacio ",new Date());
               e.preventDefault();
             } else {
-              var query = "INSERT INTO semestres (nombre, fechaRegistro) VALUES (?,?)";
-              $cordovaSQLite.execute(db, query, [$scope.data.semestre, new Date()]).then(function(res) {
-                console.log("INSERT ID -> " + res.insertId);
-                $ionicLoading.show({ template: 'Guardo', noBackdrop: true, duration: 3000 });
-              }, function (err) {
-                $ionicLoading.show({ template: err, noBackdrop: true, duration: 5000 });
-                console.error(err);
-              });
+              $scope.semestre.fechaRegistro = new Date();
+              Semestres.add($scope.semestre);
               $rootScope.semestre = undefined;
               $scope.closePopover();
               $state.transitionTo('app.guarda', null, {reload: true, notify:true});
@@ -85,11 +78,14 @@ app.controller('GuardaCtrl', function($scope, $state, $cordovaSQLite, $ionicPopo
     $scope.data.select = $rootScope.semestre.id;
     $scope.template = "";
 
-    var query = "SELECT * FROM semestres order by id desc";
-    $cordovaSQLite.execute(db, query).then(function (res) {
-      if (res.rows.length > 0) {
-        for (var i = 0; i < res.rows.length; i++) {
-          $scope.template += '<ion-radio ng-model="data.select" ng-value="'+res.rows.item(i).id+'">'+res.rows.item(i).nombre+'</ion-radio>'
+    $scope.semestres = [];
+    $scope.semestres = null;
+
+    Semestres.all().then(function(semestres){
+      $scope.semestres = semestres;
+      if ($scope.semestres.length > 0) {
+        for (var i = 0; i < $scope.semestres.length; i++) {
+          $scope.template += '<ion-radio ng-model="data.select" ng-value="'+$scope.semestres[i].id+'">'+$scope.semestres[i].nombre+'</ion-radio>'
         }
         $ionicHistory.nextViewOptions({
           disableBack: true
@@ -128,21 +124,28 @@ app.controller('GuardaCtrl', function($scope, $state, $cordovaSQLite, $ionicPopo
   };
 
   $scope.$on('$ionicView.beforeEnter', function(){
+
+
+    $scope.semestres = [];
+    $scope.semestres = null;
+    $scope.materiasSelf = [];
+    $scope.materiasSelf = null;
+
     if ($rootScope.semestre == undefined) {
-      var query = "SELECT * FROM semestres order by id desc";
-      $cordovaSQLite.execute(db, query).then(function (res) {
-        if (res.rows.length > 0) {
+      Semestres.all().then(function(semestres){
+        $scope.semestres = semestres;
+        if ($scope.semestres.length > 0) {
 
           $rootScope.semestre = {};
-          $rootScope.semestre.id = res.rows.item(0).id;
-          $rootScope.semestre.nombre = res.rows.item(0).nombre;
+          $rootScope.semestre.id = $scope.semestres[0].id;
+          $rootScope.semestre.nombre = $scope.semestres[0].nombre;
 
           $scope.materias = {};
           $scope.materias.vector = [];
 
-          var query = "SELECT * FROM materias WHERE semestre_id = "+$rootScope.semestre.id;
-          $cordovaSQLite.execute(db, query).then(function (res) {
-            if (res.rows.length > 0){
+          Materias.all($rootScope.semestre.id).then(function(materias){
+            $scope.materiasSelf = materias;
+            if ($scope.materiasSelf.length > 0){
               _tabla = new Array(100);
               var _numero = 0;
 
@@ -173,26 +176,27 @@ app.controller('GuardaCtrl', function($scope, $state, $cordovaSQLite, $ionicPopo
                 _tabla[j] = _numero/10;
               }
 
-              for(var i = 0; i < res.rows.length; i ++){
+              for(var i = 0; i < $scope.materiasSelf.length; i ++){
                 var totalUno, totalDos, totalTres, totalCuatro;
                 var notaUno, notaDos, notaTres, notaCuatro;
-                if(res.rows.item(i).notaUno == "" || angular.isUndefined(res.rows.item(i).notaUno) || res.rows.item(i).notaUno == null){totalUno = 0; notaUno = 0;}
-                else{totalUno = _tabla[res.rows.item(i).notaUno] * (parseFloat(res.rows.item(i).porceUno) / 100); notaUno = res.rows.item(i).notaUno}
+                if($scope.materiasSelf[i].notaUno == "" || angular.isUndefined($scope.materiasSelf[i].notaUno) || $scope.materiasSelf[i].notaUno == null){totalUno = 0; notaUno = 0;}
+                else{totalUno = _tabla[$scope.materiasSelf[i].notaUno] * (parseFloat($scope.materiasSelf[i].porceUno) / 100); notaUno = $scope.materiasSelf[i].notaUno}
 
-                if(res.rows.item(i).notaDos == "" || angular.isUndefined(res.rows.item(i).notaDos) || res.rows.item(i).notaDos == null){totalDos = 0; notaDos = 0;}
-                else{totalDos = _tabla[res.rows.item(i).notaDos] * (parseFloat(res.rows.item(i).porceDos) / 100); notaDos = res.rows.item(i).notaDos;}
+                if($scope.materiasSelf[i].notaDos == "" || angular.isUndefined($scope.materiasSelf[i].notaDos) || $scope.materiasSelf[i].notaDos == null){totalDos = 0; notaDos = 0;}
+                else{totalDos = _tabla[$scope.materiasSelf[i].notaDos] * (parseFloat($scope.materiasSelf[i].porceDos) / 100); notaDos = $scope.materiasSelf[i].notaDos;}
 
-                if(res.rows.item(i).notaTres == "" || angular.isUndefined(res.rows.item(i).notaTres) || res.rows.item(0).notaTres == null){totalTres = 0; notaTres = 0;}
-                else{totalTres = _tabla[res.rows.item(i).notaTres] * (parseFloat(res.rows.item(i).porceTres) / 100); notaTres = res.rows.item(i).notaTres;}
+                if($scope.materiasSelf[i].notaTres == "" || angular.isUndefined($scope.materiasSelf[i].notaTres) || $scope.materiasSelf[i].notaTres == null){totalTres = 0; notaTres = 0;}
+                else{totalTres = _tabla[$scope.materiasSelf[i].notaTres] * (parseFloat($scope.materiasSelf[i].porceTres) / 100); notaTres = $scope.materiasSelf[i].notaTres;}
 
-                if(res.rows.item(i).notaCuatro == "" || angular.isUndefined(res.rows.item(i).notaCuatro) || res.rows.item(i).notaCuatro == null){totalCuatro = 0; notaCuatro = 0;}
-                else{totalCuatro = _tabla[res.rows.item(i).notaCuatro] * (parseFloat(res.rows.item(i).porceCuatro) / 100); notaCuatro = res.rows.item(i).notaCuatro;}
+                if($scope.materiasSelf[i].notaCuatro == "" || angular.isUndefined($scope.materiasSelf[i].notaCuatro) || $scope.materiasSelf[i].notaCuatro == null){totalCuatro = 0; notaCuatro = 0;}
+                else{totalCuatro = _tabla[$scope.materiasSelf[i].notaCuatro] * (parseFloat($scope.materiasSelf[i].porceCuatro) / 100); notaCuatro = $scope.materiasSelf[i].notaCuatro;}
 
                 var acumulado = parseFloat(totalUno) + parseFloat(totalDos) + parseFloat(totalTres) + parseFloat(totalCuatro);
                 $scope.materias.vector.push({
-                  id: res.rows.item(i).id,
-                  nombre: res.rows.item(i).nombre,
-                  acumulado: parseFloat(acumulado).toFixed(2)
+                  id: $scope.materiasSelf[i].id,
+                  nombre: $scope.materiasSelf[i].nombre,
+                  acumulado: parseFloat(acumulado).toFixed(2),
+                  nota: Math.round(acumulado)
                 });
               }
             }
@@ -207,20 +211,21 @@ app.controller('GuardaCtrl', function($scope, $state, $cordovaSQLite, $ionicPopo
 
     else{
 
-      var query = "SELECT * FROM semestres WHERE id = "+$rootScope.semestre.id;
-      $cordovaSQLite.execute(db, query).then(function (res) {
-        if (res.rows.length > 0) {
+      Semestres.get($rootScope.semestre.id).then(function(semestre){
+        $scope.semestres = semestre;
+        console.log("semestre: "+$scope.semestres.id);
+        if ($scope.semestres != undefined) {
 
           $rootScope.semestre = {};
-          $rootScope.semestre.id = res.rows.item(0).id;
-          $rootScope.semestre.nombre = res.rows.item(0).nombre;
+          $rootScope.semestre.id = $scope.semestres.id;
+          $rootScope.semestre.nombre = $scope.semestres.nombre;
 
           $scope.materias = {};
           $scope.materias.vector = [];
 
-          var query = "SELECT * FROM materias WHERE semestre_id = " + $rootScope.semestre.id;
-          $cordovaSQLite.execute(db, query).then(function (res) {
-            if (res.rows.length > 0) {
+          Materias.all($rootScope.semestre.id).then(function(materias){
+            $scope.materiasSelf = materias;
+            if ($scope.materiasSelf.length > 0) {
               _tabla = new Array(100);
               var _numero = 0;
 
@@ -250,50 +255,51 @@ app.controller('GuardaCtrl', function($scope, $state, $cordovaSQLite, $ionicPopo
                 _tabla[j] = _numero / 10;
               }
 
-              for (var i = 0; i < res.rows.length; i++) {
+              for (var i = 0; i < $scope.materiasSelf.length; i++) {
                 var totalUno, totalDos, totalTres, totalCuatro;
                 var notaUno, notaDos, notaTres, notaCuatro;
-                if (res.rows.item(i).notaUno == "" || angular.isUndefined(res.rows.item(i).notaUno) || res.rows.item(i).notaUno == null) {
+                if ($scope.materiasSelf[i].notaUno == "" || angular.isUndefined($scope.materiasSelf[i].notaUno) || $scope.materiasSelf[i].notaUno == null) {
                   totalUno = 0;
                   notaUno = 0;
                 }
                 else {
-                  totalUno = _tabla[res.rows.item(i).notaUno] * (parseFloat(res.rows.item(i).porceUno) / 100);
-                  notaUno = res.rows.item(i).notaUno
+                  totalUno = _tabla[$scope.materiasSelf[i].notaUno] * (parseFloat($scope.materiasSelf[i].porceUno) / 100);
+                  notaUno = $scope.materiasSelf[i].notaUno
                 }
 
-                if (res.rows.item(i).notaDos == "" || angular.isUndefined(res.rows.item(i).notaDos) || res.rows.item(i).notaDos == null) {
+                if ($scope.materiasSelf[i].notaDos == "" || angular.isUndefined($scope.materiasSelf[i].notaDos) || $scope.materiasSelf[i].notaDos == null) {
                   totalDos = 0;
                   notaDos = 0;
                 }
                 else {
-                  totalDos = _tabla[res.rows.item(i).notaDos] * (parseFloat(res.rows.item(i).porceDos) / 100);
-                  notaDos = res.rows.item(i).notaDos;
+                  totalDos = _tabla[$scope.materiasSelf[i].notaDos] * (parseFloat($scope.materiasSelf[i].porceDos) / 100);
+                  notaDos = $scope.materiasSelf[i].notaDos;
                 }
 
-                if (res.rows.item(i).notaTres == "" || angular.isUndefined(res.rows.item(i).notaTres) || res.rows.item(0).notaTres == null) {
+                if ($scope.materiasSelf[i].notaTres == "" || angular.isUndefined($scope.materiasSelf[i].notaTres) || $scope.materiasSelf[i].notaTres == null) {
                   totalTres = 0;
                   notaTres = 0;
                 }
                 else {
-                  totalTres = _tabla[res.rows.item(i).notaTres] * (parseFloat(res.rows.item(i).porceTres) / 100);
-                  notaTres = res.rows.item(i).notaTres;
+                  totalTres = _tabla[$scope.materiasSelf[i].notaTres] * (parseFloat($scope.materiasSelf[i].porceTres) / 100);
+                  notaTres = $scope.materiasSelf[i].notaTres;
                 }
 
-                if (res.rows.item(i).notaCuatro == "" || angular.isUndefined(res.rows.item(i).notaCuatro) || res.rows.item(i).notaCuatro == null) {
+                if ($scope.materiasSelf[i].notaCuatro == "" || angular.isUndefined($scope.materiasSelf[i].notaCuatro) || $scope.materiasSelf[i].notaCuatro == null) {
                   totalCuatro = 0;
                   notaCuatro = 0;
                 }
                 else {
-                  totalCuatro = _tabla[res.rows.item(i).notaCuatro] * (parseFloat(res.rows.item(i).porceCuatro) / 100);
-                  notaCuatro = res.rows.item(i).notaCuatro;
+                  totalCuatro = _tabla[$scope.materiasSelf[i].notaCuatro] * (parseFloat($scope.materiasSelf[i].porceCuatro) / 100);
+                  notaCuatro = $scope.materiasSelf[i].notaCuatro;
                 }
 
                 var acumulado = parseFloat(totalUno) + parseFloat(totalDos) + parseFloat(totalTres) + parseFloat(totalCuatro);
                 $scope.materias.vector.push({
-                  id: res.rows.item(i).id,
-                  nombre: res.rows.item(i).nombre,
-                  acumulado: parseFloat(acumulado).toFixed(2)
+                  id: $scope.materiasSelf[i].id,
+                  nombre: $scope.materiasSelf[i].nombre,
+                  acumulado: parseFloat(acumulado).toFixed(2),
+                  nota: Math.round(acumulado)
                 });
               }
             }

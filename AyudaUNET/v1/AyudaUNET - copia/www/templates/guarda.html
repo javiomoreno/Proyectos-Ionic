@@ -16,11 +16,11 @@
 
       <a class="item item-avatar" ng-repeat="item in materias.vector track by $index" href="#app/detallemateria/{{item.id}}">
         <img src="img/materia.svg">
-        <h2>{{item.nombre}}</h2>
-        <p ng-if="item.acumulado >= 4.5" style="color: green">{{item.acumulado}}</p>
-        <p ng-if="item.acumulado < 4.5" style="color: red">{{item.acumulado}}</p>
+        <h2 style="padding-right: 20px">{{item.nombre}}</h2>
+        <p>{{item.acumulado}}</p>
+        <span ng-if="item.acumulado < 4.5" class="badge assertive" style="font-size: x-small">{{item.nota}}</span>
+        <span ng-if="item.acumulado >= 4.5" class="badge balanced" style="font-size: x-small">{{item.nota}}</span>
       </a>
-
     </div>
   </ion-content>
 

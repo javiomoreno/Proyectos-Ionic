@@ -1,13 +1,13 @@
 /**
  * Created by Javier Moreno on 4 oct 2016.
  */
-app.controller('CuantoCtrl', function($scope, $stateParams, $ionicLoading, $ionicPopover) {
+app.controller('CuantoCtrl', function($scope, $state, $stateParams, $ionicLoading, $ionicPopover, $ionicHistory, $ionicPopup) {
 
   // .fromTemplate() method
   var template = '<ion-popover-view style="height: 135px !important;">' +
     '   <ion-content class="padding">' +
     '     <div class="list">' +
-    '        <a class="item" href="#/app/nuevosemestre">' +
+    '        <a class="item" ng-click="showAlert()">' +
     '         Nueva Materia' +
     '      <a class="item" href="#/app/nuevosemestre">' +
     '         Ayuda' +
@@ -26,6 +26,51 @@ app.controller('CuantoCtrl', function($scope, $stateParams, $ionicLoading, $ioni
   $scope.$on('$destroy', function () {
     $scope.popover.remove();
   });
+
+  $scope.showAlert = function() {
+
+    $scope.data = {};
+
+    $ionicHistory.nextViewOptions({
+      disableBack: true
+    });
+
+    var promptPopup = $ionicPopup.prompt({
+      title: '¿Cantidad de Parciales?',
+      template: '<ion-radio ng-model="data.select" ng-value="2">2 Parciales</ion-radio><ion-radio ng-model="data.select" ng-value="3">3 Parciales</ion-radio><ion-radio ng-model="data.select" ng-value="4">4 Parciales</ion-radio>',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancelar',
+          onTap: function(e) {
+            return "null";
+          }
+        },
+        {
+          text: '<b>Ok</b>',
+          type: 'button-positive',
+          onTap: function(e) {
+            if ($scope.data.select != undefined) {
+              return $scope.data.select;
+            }
+            else{
+              return "null";
+            }
+          }
+        }
+      ]
+    });
+
+    promptPopup.then(function(res) {
+      if(res == 'null'){
+        $scope.closePopover();
+        $state.go('app.inicio');
+      }
+      else{
+        $scope.closePopover();
+        $state.go('app.cuanto', {id: res});
+      }
+    });
+  };
 
   $scope.materia = {};
   $scope.materia.cantParciales = $stateParams.id;
@@ -68,6 +113,7 @@ app.controller('CuantoCtrl', function($scope, $stateParams, $ionicLoading, $ioni
   }
 
   $scope.onCalcular = function (res) {
+    var sumatoria;
     if($scope.materia.cantParciales == 2){
       if((angular.isUndefined($scope.materia.porceUno) || angular.isUndefined($scope.materia.notaUno))
         || ($scope.materia.porceUno == null || $scope.materia.notaUno == null)
@@ -83,7 +129,8 @@ app.controller('CuantoCtrl', function($scope, $stateParams, $ionicLoading, $ioni
             $ionicLoading.show({ template: 'Los Porcentajes deben estar entre 0 y 100!', noBackdrop: true, duration: 3000 });
           }
           else{
-            console.log("Acumulado: "+($scope.materia.porceUno/100 * $scope.DevolverPosicion(parseInt($scope.materia.notaUno))));
+            sumatoria = CalcularNota1($scope.materia.porceUno, parseInt($scope.materia.notaUno));
+            CalcularCuantoFalta(sumatoria, parseInt($scope.materia.porceUno));
           }
         }
       }
@@ -108,7 +155,8 @@ app.controller('CuantoCtrl', function($scope, $stateParams, $ionicLoading, $ioni
               $ionicLoading.show({ template: 'La suma de los Porcentajes debe ser menor a 100!', noBackdrop: true, duration: 3000 });
             }
             else{
-              console.log("fino");
+              sumatoria = CalcularNota2($scope.materia.porceUno, $scope.materia.porceDos, parseInt($scope.materia.notaUno), parseInt($scope.materia.notaDos));
+              CalcularCuantoFalta(sumatoria, (parseInt($scope.materia.porceUno) + parseInt($scope.materia.porceDos)));
             }
           }
         }
@@ -133,7 +181,8 @@ app.controller('CuantoCtrl', function($scope, $stateParams, $ionicLoading, $ioni
               $ionicLoading.show({ template: 'La suma de los Porcentajes debe ser menor a 100!', noBackdrop: true, duration: 3000 });
             }
             else{
-              console.log("fino");
+              sumatoria = CalcularNota3($scope.materia.porceUno, $scope.materia.porceDos, $scope.materia.porceTres, parseInt($scope.materia.notaUno), parseInt($scope.materia.notaDos), parseInt($scope.materia.notaTres));
+              CalcularCuantoFalta(sumatoria, (parseInt($scope.materia.porceUno) + parseInt($scope.materia.porceDos) + parseInt($scope.materia.porceTres)));
             }
           }
         }
@@ -141,9 +190,7 @@ app.controller('CuantoCtrl', function($scope, $stateParams, $ionicLoading, $ioni
     }
   }
 
-  $scope.DevolverNota = function(numero)
-  {
-    console.log("nota. "+numero)
+  DevolverNota = function(numero){
     if(numero > 9.0)
       return -1;
     if(numero == 0)
@@ -159,6 +206,171 @@ app.controller('CuantoCtrl', function($scope, $stateParams, $ionicLoading, $ioni
     }
     return this._nota;
   }
+
+  CalcularCuantoFalta = function (sumatoria, porce) {
+    var aux1, aux2;
+    var template = "", template1 = "";
+    var porceDos = (100 - porce) / 100;
+    if(sumatoria < 4.5){
+      template += "Lleva acumulado: "+sumatoria+"<br>";
+      if(DevolverNota(parseFloat((4.5 - sumatoria)/porceDos).toFixed(1)) == -1){
+        template1 = "Esta fuera de escala \n";
+      }else{
+        template1 = "Aún la puede pasar"
+        if(DevolverNota(parseFloat((4.5 - sumatoria)/porceDos).toFixed(1)) == 0) {
+          template += "Para el 5 menos de 7 pts <br>";
+        }
+        else{
+          template += "Para el 5: "+DevolverNota(parseFloat((4.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+        }
+        if(DejarlaMasAlta(5.5, sumatoria, porceDos)){
+          template += "Para el 6: "+DevolverNota(parseFloat((5.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+        }
+        if(DejarlaMasAlta(6.5, sumatoria, porceDos)){
+          template += "Para el 7: "+DevolverNota(parseFloat((6.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+        }
+        if(DejarlaMasAlta(7.5, sumatoria, porceDos)){
+          template += "Para el 8: "+DevolverNota(parseFloat((7.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+        }
+        if(DejarlaMasAlta(8.5, sumatoria, porceDos)){
+          template += "Para el 9: "+DevolverNota(parseFloat((8.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+        }
+      }
+      var alertPopup = $ionicPopup.alert({
+        title: '¿Cuánto me Falta?',
+        subTitle: template1,
+        template: template,
+      });
+    }
+
+    if(sumatoria >= 4.5 && sumatoria < 5.5){
+      template = "Lleva acumulado: "+sumatoria+"<br>";
+      template1 = "Ya la pasó";
+      if(DevolverNota(parseFloat((5.5 - sumatoria)/porceDos).toFixed(1)) == 0) {
+        template += "Para el 6 menos de 7 pts.<br>";
+      }
+      else{
+        template += "Para el 6: "+DevolverNota(parseFloat((5.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+      }
+      if(DejarlaMasAlta(6.5, sumatoria, porceDos)){
+        template += "Para el 7: "+DevolverNota(parseFloat((6.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+      }
+      if(DejarlaMasAlta(7.5, sumatoria, porceDos)){
+        template += "Para el 8: "+DevolverNota(parseFloat((7.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+      }
+      if(DejarlaMasAlta(8.5, sumatoria, porceDos)){
+        template += "Para el 9: "+DevolverNota(parseFloat((8.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+      }
+      var alertPopup = $ionicPopup.alert({
+        title: '¿Cuánto me Falta?',
+        subTitle: template1,
+        template: template,
+      });
+    }
+
+    if(sumatoria >= 5.5 && sumatoria < 6.5){
+      template = "Lleva acumulado: "+sumatoria+"<br>";
+      template1 = "Ya la pasó";
+      if(DevolverNota(parseFloat((6.5 - sumatoria)/porceDos).toFixed(1)) == 0) {
+        template += "Para el 7 menos de 7 pts.<br>";
+      }
+      else{
+        template += "para 7: "+DevolverNota(parseFloat((6.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+      }
+      if(DejarlaMasAlta(7.5, sumatoria, porceDos)){
+        template += "Para el 8: "+DevolverNota(parseFloat((7.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+      }
+      if(DejarlaMasAlta(8.5, sumatoria, porceDos)){
+        template += "Para el 9: "+DevolverNota(parseFloat((8.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+      }
+      var alertPopup = $ionicPopup.alert({
+        title: '¿Cuánto me Falta?',
+        subTitle: template1,
+        template: template,
+      });
+    }
+
+    if(sumatoria >= 6.5 && sumatoria < 7.5){
+      template = "Lleva acumulado: "+sumatoria+"<br>";
+      template1 = "Ya la pasó";
+      if(DevolverNota(parseFloat((7.5 - sumatoria)/porceDos).toFixed(1)) == 0) {
+        template += "Para el 8 menos de 7 pts.<br>";
+      }
+      else{
+        template += "para 8: "+DevolverNota(parseFloat((7.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+      }
+      if(DejarlaMasAlta(8.5, sumatoria, porceDos)){
+        template += "Para el 9: "+DevolverNota(parseFloat((8.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+      }
+      var alertPopup = $ionicPopup.alert({
+        title: '¿Cuánto me Falta?',
+        subTitle: template1,
+        template: template,
+      });
+    }
+
+    if(sumatoria >= 7.5 && sumatoria < 8.5){
+      template = "Lleva acumulado: "+sumatoria+"<br>";
+      template1 = "Ya la pasó";
+      if(DevolverNota(parseFloat((8.5 - sumatoria)/porceDos).toFixed(1)) == 0) {
+        template += "Para el 9 menos de 7 pts.<br>";
+      }
+      else{
+        template += "para 9: "+DevolverNota(parseFloat((8.5 - sumatoria)/porceDos).toFixed(1))+" pts.<br>";
+      }
+      var alertPopup = $ionicPopup.alert({
+        title: '¿Cuánto me Falta?',
+        subTitle: template1,
+        template: template,
+      });
+    }
+
+    if(sumatoria >= 8.5){
+      var alertPopup = $ionicPopup.alert({
+        title: '¿Cuánto me Falta?',
+        subTitle: "Ya la pasó",
+        template: "Lleva acumulado: "+sumatoria+"<br> Ya la tiene con 9",
+      });
+    }
+  }
+
+  DejarlaMasAlta = function(superior, sumatoria, porcen){
+    if(DevolverNota(parseFloat((superior - sumatoria)/porcen).toFixed(1)) != -1 )
+    return true;
+  else
+    return false;
+  }
+
+  CalcularNota1 = function(porceUno, notaUno)
+  {
+    var porce_1, sumatoria;
+    porce_1 = porceUno / 100;
+
+    sumatoria = (porce_1 * $scope.vector._tabla[notaUno]);
+    return parseFloat((sumatoria*100)/100).toFixed(2);
+  }
+
+  CalcularNota2 = function(porceUno, porceDos, notaUno, notaDos)
+  {
+    var porce_1, porce_2, sumatoria;
+    porce_1 = porceUno / 100;
+    porce_2 = porceDos / 100;
+
+    sumatoria = (porce_1 * $scope.vector._tabla[notaUno]) + (porce_2 * $scope.vector._tabla[notaDos]);
+    return parseFloat((sumatoria*100)/100).toFixed(2);
+  }
+
+  CalcularNota3 = function(porceUno, porceDos, porceTres, notaUno, notaDos, notaTres)
+  {
+    var porce_1, porce_2, porce_3, sumatoria;
+    porce_1 = porceUno / 100;
+    porce_2 = porceDos / 100;
+    porce_3 = porceTres / 100;
+
+    sumatoria = (porce_1 * $scope.vector._tabla[notaUno]) + (porce_2 * $scope.vector._tabla[notaDos]) + (porce_3 * $scope.vector._tabla[notaTres]);
+    return parseFloat((sumatoria*100)/100).toFixed(2);
+  }
+
 
   $scope.DevolverPosicion = function(numero){
     return $scope.vector._tabla[numero];

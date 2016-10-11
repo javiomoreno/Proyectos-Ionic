@@ -1,6 +1,4 @@
-angular.module('app.services', [])
-
-.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$rootScope){
+app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$rootScope){
 	ChatDetailsObj={};
 
 	ChatDetailsObj.setTo = function(to_id){
@@ -21,7 +19,9 @@ angular.module('app.services', [])
 	ChatsObj.roster=[];
 
 	loadRoster= function() {
-			var iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});
+    var iq = $iq({type: 'get'}).c('list', {xmlns: 'jurn:xmpp:archive'});
+    console.log(iq)
+    //var iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});
 
 				connection.sendIQ(iq,
 					//On recieve roster iq
@@ -131,14 +131,10 @@ angular.module('app.services', [])
 
 	}
 
-
-
 	ChatsObj.allRoster= function() {
 		loadRoster();
 		return ChatsObj.roster;
 	}
-
-
 
 	ChatsObj.removeRoster= function(chat) {
 		ChatsObj.roster.splice(ChatsObj.roster.indexOf(chat), 1);
@@ -149,7 +145,7 @@ angular.module('app.services', [])
 			if (ChatsObj.roster[i].id == chatId) {
 			  return ChatsObj.roster[i];
 			}
-		  }
+    }
 	}
 
 
@@ -164,17 +160,13 @@ angular.module('app.services', [])
 
 }])
 
-
-
-
 .factory('sharedConn', ['$ionicPopup','$state','$rootScope',function($ionicPopup,$state, $rootScope){
 
 	 var SharedConnObj={};
 
-	 SharedConnObj.BOSH_SERVICE = 'http://192.168.1.5:7070/http-bind/';
+	 SharedConnObj.BOSH_SERVICE = 'http://192.168.1.2:7070/http-bind/';
 	 SharedConnObj.connection   = null;    // The main Strophe connection object.
 	 SharedConnObj.loggedIn     = false;
-
 
 	 //------------------------------------------HELPER FUNCTIONS---------------------------------------------------------------
 	 SharedConnObj.getConnectObj=function(){
@@ -190,8 +182,6 @@ angular.module('app.services', [])
 		str=str.substring(0, str.indexOf('/'));
         return str;
      };
-
-
 
 	 //--------------------------------------***END HELPER FUNCTIONS***----------------------------------------------------------
 
@@ -218,16 +208,16 @@ angular.module('app.services', [])
 
 				SharedConnObj.connection.addHandler(SharedConnObj.on_subscription_request, null, "presence", "subscribe");
 
-				$state.go('tabsController.chats', {}, {location: "replace", reload: true});
+				$state.go('app.chats', {}, {location: "replace", reload: true});
 		}
 	};
 
-
 	//When a new message is recieved
 	SharedConnObj.onMessage=function(msg){
-		$rootScope.$broadcast('msgRecievedBroadcast', msg );
+    $rootScope.$broadcast('msgRecievedBroadcast', msg );
 		return true;
 	};
+
 
 	SharedConnObj.register=function (jid,pass,name) {
 		//to add register function
@@ -250,7 +240,6 @@ angular.module('app.services', [])
 		accepted_map[jid]=true;
 	}
 	//--------------------------------------------
-
 
 	SharedConnObj.on_subscription_request = function(stanza){
 
@@ -277,13 +266,7 @@ angular.module('app.services', [])
 
 			return true;
 		}
-
 	}
-
-
-
-
-
 	return SharedConnObj;
 }])
 

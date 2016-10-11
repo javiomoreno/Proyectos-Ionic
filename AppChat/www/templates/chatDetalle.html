@@ -13,9 +13,9 @@
 
       </div>
   </ion-content>
-  <ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
-      <label class="item-input-wrapper">
-        <input type="text" placeholder="Escribe su mensaje" on-return="showSendMessage(); closeKeyboard()" ng-model="data.message" on-focus="inputUp()" on-blur="inputDown()" />
+  <ion-footer-bar keyboard-attach class="bar-stable item-input-inset" style="background-color: #fff;">
+      <label class="item-input-wrapper" style="background-color: #fff;">
+        <input type="text" placeholder="Escribe su mensaje" on-return="showSendMessage(); closeKeyboard()" ng-model="data.message" on-focus="inputUp()" on-blur="inputDown()" style="background-color: #fff;" />
       </label>
       <a ng-disabled="!data.message" class="button icon-left ion-paper-airplane button-clear button-positive" ng-click="showSendMessage()"></a>
     <br>

@@ -1,6 +1,4 @@
-angular.module('app.routes', [])
-
-.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($stateProvider, $urlRouterProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -8,75 +6,64 @@ angular.module('app.routes', [])
   // Each state's controller can be found in controllers.js
   $stateProvider
 
+    .state('app', {
+      url: '/app',
+      abstract: true,
+      templateUrl: 'templates/menu.html',
+      controller: 'AppCtrl'
+    })
 
-
-   .state('tabsController.dashboard', {
-    url: '/page2',
-    views: {
-      'tab1': {
-        templateUrl: 'templates/dashboard.html',
-        controller: 'dashboardCtrl'
-      }
-    }
-  })
-
-  .state('tabsController.chats', {
-    url: '/page3',
-    views: {
-      'tab2': {
-        templateUrl: 'templates/chats.html',
-        controller: 'chatsCtrl'
-      }
-    }
-  })
-
-  .state('tabsController.settings', {
-    url: '/page4',
-    views: {
-      'tab3': {
-        templateUrl: 'templates/settings.html',
-        controller: 'settingsCtrl'
-      }
-    }
-  })
-
-  .state('tabsController', {
-    url: '/page1',
-    templateUrl: 'templates/tabsController.html',
-    abstract:true
-  })
-
-  .state('login', {
-    url: '/login',
-    templateUrl: 'templates/login.html',
-    controller: 'loginCtrl'
-  })
-
-  .state('tabsController.chatDetails', {
-    url: '/page6',
-    views: {
-      'tab2': {
-        templateUrl: 'templates/chatDetails.html',
-        controller: 'chatDetailsCtrl'
-      }
-    }
-  })
-
-    .state('tabsController.chatDetalle', {
-      url: '/page6',
+    .state('app.chats', {
+      url: '/chats',
       views: {
-        'tab2': {
-          templateUrl: 'templates/chatDetalle.html',
-          controller: 'chatDetailsCtrl'
+        'menuContent': {
+          templateUrl: 'templates/chats.html',
+          controller: 'ChatsCtrl'
         }
       }
     })
 
-  .state('register', {
-    url: '/page7',
-    templateUrl: 'templates/register.html',
-    controller: 'registerCtrl'
-  })
+    .state('app.chatDetalle', {
+      url: '/chatDetalle',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/chatDetalle.html',
+          controller: 'ChatDetailCtrl'
+        }
+      }
+    })
+
+    .state('app.profile', {
+      url: '/profile',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/profile.html',
+          controller: 'ProfileCtrl'
+        }
+      }
+    })
+
+    .state('app.settings', {
+      url: '/settings',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/settings.html',
+          controller: 'SettingsCtrl'
+        }
+      }
+    })
+
+    .state('register', {
+      url: '/page7',
+      templateUrl: 'templates/register.html',
+      controller: 'registerCtrl'
+    })
+
+    .state('login', {
+      url: '/login',
+      templateUrl: 'templates/login.html',
+      controller: 'LoginCtrl'
+    })
 
 $urlRouterProvider.otherwise('/login')
 
