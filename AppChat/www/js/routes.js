@@ -13,6 +13,16 @@ app.config(function($stateProvider, $urlRouterProvider) {
       controller: 'AppCtrl'
     })
 
+    .state('app.contacts', {
+      url: '/contacts',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/contacts.html',
+          controller: 'ContactsCtrl'
+        }
+      }
+    })
+
     .state('app.chats', {
       url: '/chats',
       views: {

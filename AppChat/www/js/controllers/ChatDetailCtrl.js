@@ -1,7 +1,7 @@
 /**
  * Created by Javier Moreno on 4 oct 2016.
  */
-app.controller('ChatDetailCtrl', function($scope, $timeout, $ionicScrollDelegate, sharedConn, ChatDetails) {
+app.controller('ChatDetailCtrl', function($scope, $timeout, $ionicScrollDelegate, sharedConn, ChatDetails, Chats) {
 
   $scope.hideTime = true;
   $scope.data = {};
@@ -9,10 +9,12 @@ app.controller('ChatDetailCtrl', function($scope, $timeout, $ionicScrollDelegate
   $scope.messages = [];
   $scope.to_id=ChatDetails.getTo();
 
+  console.log(Chats.allRoster());
+
   var isIOS = ionic.Platform.isIOS();
 
   $scope.sendMsg=function(to,body){
-    var to_jid  = Strophe.getBareJidFromJid(to)+'@appchat';
+    var to_jid  = Strophe.getBareJidFromJid(to)+'@appchat.com';
     var timestamp = new Date().getTime();
     var reqChannelsItems = $msg({id:timestamp, to:to_jid, type: 'chat' })
       .c("body").t(body);
