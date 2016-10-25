@@ -18,10 +18,12 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 	connection=sharedConn.getConnectObj();
 	ChatsObj.roster=[];
 
+
 	loadRoster= function() {
-    var iq = $iq({type: 'get'}).c('list', {xmlns: 'jurn:xmpp:archive'});
-    console.log(iq)
-    //var iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});
+    //var iq = $iq({type: 'get'}).c('list', {xmlns: 'urn:xmpp:archive'}).c('set', {xmlns: 'http://jabber.org/protocol/rs'});
+    //console.log(iq)
+
+    var iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});
 
 				connection.sendIQ(iq,
 					//On recieve roster iq
@@ -45,6 +47,17 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 								});
 
 							});
+
+              /*$(iq).find("chat").each(function(){
+
+                ChatsObj.roster.push({
+                  id: $(this).attr("with"),
+                  name:  $(this).attr("with") || $(this).attr("jid"),
+                  lastText: 'Available to Chat',
+                  face: 'img/ben.png'
+                });
+
+              });*/
 
 						});
 
@@ -164,7 +177,7 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 
 	 var SharedConnObj={};
 
-	 SharedConnObj.BOSH_SERVICE = 'http://192.168.1.2:7070/http-bind/';
+	 SharedConnObj.BOSH_SERVICE = 'http://192.168.1.4:7070/http-bind/';
 	 SharedConnObj.connection   = null;    // The main Strophe connection object.
 	 SharedConnObj.loggedIn     = false;
 
