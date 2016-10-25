@@ -20,10 +20,83 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 
 
 	loadRoster= function() {
+<<<<<<< HEAD
     //var iq = $iq({type: 'get'}).c('list', {xmlns: 'urn:xmpp:archive'}).c('set', {xmlns: 'http://jabber.org/protocol/rs'});
     //console.log(iq)
 
     var iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});
+=======
+	
+		var iq = $iq({type: 'get'}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: 'roberth13@appchat.com'}).c('set', {xmlns: 'http://jabber.org/protocol/rsm'});
+
+		connection.sendIQ(iq,
+			function(iq) {
+				console.log(iq);
+				if (!iq || iq.length == 0)
+					return;
+				$rootScope.$apply(function() {
+
+					$(iq).find("item").each(function(){
+
+						ChatsObj.roster.push({
+							id: $(this).attr("jid"),
+							name:  $(this).attr("name") || $(this).attr("jid"),
+							lastText: 'Available to Chat',
+							face: 'img/ben.png'
+						});
+
+					});
+
+				});
+
+		});
+		return ChatsObj.roster;
+
+	}
+
+	ChatsObj.allRoster= function() {
+		loadRoster();
+		return ChatsObj.roster;
+	}
+
+	ChatsObj.removeRoster= function(chat) {
+		ChatsObj.roster.splice(ChatsObj.roster.indexOf(chat), 1);
+	}
+
+	ChatsObj.getRoster= function(chatId) {
+		for (var i = 0; i < ChatsObj.roster.length; i++) {
+			if (ChatsObj.roster[i].id == chatId) {
+			  return ChatsObj.roster[i];
+			}
+    	}
+	}
+
+
+	ChatsObj.addNewRosterContact=function(to_id){
+		console.log(to_id);
+		connection.send($pres({ to: to_id , type: "subscribe" }));
+	}
+
+
+	return ChatsObj;
+
+
+}])
+
+.factory('Contacts', ['sharedConn','$rootScope','$state', function(sharedConn,$rootScope,$state){
+
+	ContactsObj={};
+
+	connection=sharedConn.getConnectObj();
+	ContactsObj.roster=[];
+
+	loadRoster= function() {
+	//var iq = $iq({type: 'get'}).c('list', {xmlns: 'urn:xmpp:archive', with: 'roberth13@appchat.com'});
+    //var iq = $iq({type: 'get'}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: 'roberth13@appchat.com'}).c('set', {xmlns: 'http://jabber.org/protocol/rsm'});
+    
+    var iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});
+	//console.log(iq)
+>>>>>>> origin/master
 
 				connection.sendIQ(iq,
 					//On recieve roster iq
@@ -39,7 +112,7 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 
 							$(iq).find("item").each(function(){
 
-								ChatsObj.roster.push({
+								ContactsObj.roster.push({
 									id: $(this).attr("jid"),
 									name:  $(this).attr("name") || $(this).attr("jid"),
 									lastText: 'Available to Chat',
@@ -104,7 +177,7 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 									//roster update via Client 1(ie this client) accepting request
 									if($(this).attr("subscription")=="from"){
 
-										ChatsObj.roster.push({
+										ContactsObj.roster.push({
 											id: $(this).attr("jid"),
 											name:  $(this).attr("name") || $(this).attr("jid"),
 											lastText: 'Available to Chat',
@@ -114,7 +187,7 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 									// Waiting for the Client 2 to accept the request
 									else if ( $(this).attr("subscription")=="none"  && $(this).attr("ask")=="subscribe" ){
 
-										ChatsObj.roster.push({
+										ContactsObj.roster.push({
 											id: $(this).attr("jid"),
 											name:  $(this).attr("name") || $(this).attr("jid"),
 											lastText: 'Waiting to Accept',
@@ -127,11 +200,11 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 									//roster update via Client 2 deleting the roster contact
 									else if($(this).attr("subscription")=="none"){
 										console.log( $(this).attr("jid")  );
-										ChatsObj.removeRoster( ChatsObj.getRoster( $(this).attr("jid") ) );
+										ContactsObj.removeRoster( ContactsObj.getRoster( $(this).attr("jid") ) );
 									}
 
 								});
-								$state.go('tabsController.chats', {}, {location: "replace", reload: true});
+								$state.go('app.Contacts', {}, {location: "replace", reload: true});
 
 							});
 
@@ -140,35 +213,35 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 					,"jabber:iq:roster", "iq", "set");
 
 
-					return ChatsObj.roster;
+					return ContactsObj.roster;
 
 	}
 
-	ChatsObj.allRoster= function() {
+	ContactsObj.allRoster= function() {
 		loadRoster();
-		return ChatsObj.roster;
+		return ContactsObj.roster;
 	}
 
-	ChatsObj.removeRoster= function(chat) {
-		ChatsObj.roster.splice(ChatsObj.roster.indexOf(chat), 1);
+	ContactsObj.removeRoster= function(chat) {
+		ContactsObj.roster.splice(ContactsObj.roster.indexOf(chat), 1);
 	}
 
-	ChatsObj.getRoster= function(chatId) {
-		for (var i = 0; i < ChatsObj.roster.length; i++) {
-			if (ChatsObj.roster[i].id == chatId) {
-			  return ChatsObj.roster[i];
+	ContactsObj.getRoster= function(chatId) {
+		for (var i = 0; i < ContactsObj.roster.length; i++) {
+			if (ContactsObj.roster[i].id == chatId) {
+			  return ContactsObj.roster[i];
 			}
     }
 	}
 
 
-	ChatsObj.addNewRosterContact=function(to_id){
+	ContactsObj.addNewRosterContact=function(to_id){
 		console.log(to_id);
 		connection.send($pres({ to: to_id , type: "subscribe" }));
 	}
 
 
-	return ChatsObj;
+	return ContactsObj;
 
 
 }])
@@ -177,7 +250,11 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 
 	 var SharedConnObj={};
 
+<<<<<<< HEAD
 	 SharedConnObj.BOSH_SERVICE = 'http://192.168.1.4:7070/http-bind/';
+=======
+	 SharedConnObj.BOSH_SERVICE = 'http://127.0.0.1:7070/http-bind/';
+>>>>>>> origin/master
 	 SharedConnObj.connection   = null;    // The main Strophe connection object.
 	 SharedConnObj.loggedIn     = false;
 
@@ -215,7 +292,7 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 		} else if (status == Strophe.Status.DISCONNECTED) {
 			console.log('Strophe is disconnected.');
 		} else if (status == Strophe.Status.CONNECTED) {
-				SharedConnObj.connection.addHandler(SharedConnObj.onMessage, null, 'message', null, null ,null);
+				SharedConnObj.connection.addHandler(SharedConnObj.onMessage, null, 'message', 'chat', null ,null);
 				SharedConnObj.connection.send($pres().tree());
 				SharedConnObj.loggedIn=true;
 
@@ -227,8 +304,8 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 
 	//When a new message is recieved
 	SharedConnObj.onMessage=function(msg){
-    $rootScope.$broadcast('msgRecievedBroadcast', msg );
-		return true;
+		$rootScope.$broadcast('msgRecievedBroadcast', msg );
+			return true;
 	};
 
 
