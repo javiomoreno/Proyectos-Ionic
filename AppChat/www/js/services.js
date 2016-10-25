@@ -19,15 +19,11 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 	ChatsObj.roster=[];
 
 
-	loadRoster= function() {
-<<<<<<< HEAD
-    //var iq = $iq({type: 'get'}).c('list', {xmlns: 'urn:xmpp:archive'}).c('set', {xmlns: 'http://jabber.org/protocol/rs'});
-    //console.log(iq)
+	loadRosterArchivo = function(to_id) {
+	  console.log("aqui lega: "+to_id+"@appchat.com")
 
-    var iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});
-=======
-	
-		var iq = $iq({type: 'get'}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: 'roberth13@appchat.com'}).c('set', {xmlns: 'http://jabber.org/protocol/rsm'});
+    //var iq = $iq({type: 'get'}).c('list', {xmlns: 'urn:xmpp:archive'}).c('set', {xmlns: 'http://jabber.org/protocol/rs'});
+    var iq = $iq({type: 'get'}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: ''+to_id+'@appchat.com'}).c('set', {xmlns: 'http://jabber.org/protocol/rsm'});
 
 		connection.sendIQ(iq,
 			function(iq) {
@@ -36,26 +32,45 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 					return;
 				$rootScope.$apply(function() {
 
-					$(iq).find("item").each(function(){
+				  var d = new Date($(iq).find("chat").attr("start"));
 
-						ChatsObj.roster.push({
-							id: $(this).attr("jid"),
-							name:  $(this).attr("name") || $(this).attr("jid"),
-							lastText: 'Available to Chat',
-							face: 'img/ben.png'
-						});
+					$(iq).find("from").each(function(){
+            d.setSeconds(d.getSeconds() + $(this).attr("secs"));
+            var d2 = d.toLocaleTimeString().replace(/:\d+ /, ' ');
 
+            if($(this).find("from")) {
+
+              ChatsObj.roster.push({
+                userId: $(this).attr("jid"),
+                text: $(this)[0].textContent,
+                d: d2
+              });
+            }
 					});
+
+          $(iq).find("to").each(function(){
+
+            d.setSeconds(d.getSeconds() + $(this).attr("secs"));
+            var d2 = d.toLocaleTimeString().replace(/:\d+ /, ' ');
+
+            ChatsObj.roster.push({
+              userId: sharedConn.getConnectObj().jid,
+              text:  $(this)[0].textContent,
+              d: d2
+            });
+
+          });
 
 				});
 
 		});
+    console.log(ChatsObj.roster);
 		return ChatsObj.roster;
 
 	}
 
-	ChatsObj.allRoster= function() {
-		loadRoster();
+	ChatsObj.allRoster= function(to_id) {
+    loadRosterArchivo(to_id);
 		return ChatsObj.roster;
 	}
 
@@ -91,12 +106,7 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 	ContactsObj.roster=[];
 
 	loadRoster= function() {
-	//var iq = $iq({type: 'get'}).c('list', {xmlns: 'urn:xmpp:archive', with: 'roberth13@appchat.com'});
-    //var iq = $iq({type: 'get'}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: 'roberth13@appchat.com'}).c('set', {xmlns: 'http://jabber.org/protocol/rsm'});
-    
     var iq = $iq({type: 'get'}).c('query', {xmlns: 'jabber:iq:roster'});
-	//console.log(iq)
->>>>>>> origin/master
 
 				connection.sendIQ(iq,
 					//On recieve roster iq
@@ -249,12 +259,7 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 .factory('sharedConn', ['$ionicPopup','$state','$rootScope',function($ionicPopup,$state, $rootScope){
 
 	 var SharedConnObj={};
-
-<<<<<<< HEAD
-	 SharedConnObj.BOSH_SERVICE = 'http://192.168.1.4:7070/http-bind/';
-=======
 	 SharedConnObj.BOSH_SERVICE = 'http://127.0.0.1:7070/http-bind/';
->>>>>>> origin/master
 	 SharedConnObj.connection   = null;    // The main Strophe connection object.
 	 SharedConnObj.loggedIn     = false;
 

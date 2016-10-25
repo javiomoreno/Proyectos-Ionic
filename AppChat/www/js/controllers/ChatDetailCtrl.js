@@ -7,9 +7,10 @@ app.controller('ChatDetailCtrl', function($scope, $timeout, $ionicScrollDelegate
   $scope.data = {};
   $scope.myId = sharedConn.getConnectObj().jid;
   $scope.messages = [];
+
   $scope.to_id=ChatDetails.getTo();
 
-  console.log(Chats.allRoster());
+  $scope.messages = Chats.allRoster($scope.to_id);
 
   var isIOS = ionic.Platform.isIOS();
 
@@ -40,6 +41,7 @@ app.controller('ChatDetailCtrl', function($scope, $timeout, $ionicScrollDelegate
   };
 
   $scope.messageRecieve=function(msg){
+    console.log(msg);
 
     //  var to = msg.getAttribute('to');
     var from = msg.getAttribute('from');

@@ -9,7 +9,7 @@
         </button>
       </div>
        <ion-list style="">
-         <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contact in contacts" type="item-text-wrap" ng-click="chatDetails(chat.id)">
+         <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contact in contacts" type="item-text-wrap" ng-click="chatDetails(contact.id)">
           <img ng-src="{{contact.face}}">
           <h2>{{contact.name}}</h2>
           <p>{{contact.lastText}}</p>

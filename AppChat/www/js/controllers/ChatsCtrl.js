@@ -3,7 +3,7 @@
  */
 app.controller('ChatsCtrl', function($scope,Chats,$state,ChatDetails) {
 
-  $scope.chats = Chats.allRoster();
+  /*$scope.chats = Chats.allRoster();
 
   $scope.remove = function(chat) {
     Chats.removeRoster(chat);
@@ -18,6 +18,6 @@ app.controller('ChatsCtrl', function($scope,Chats,$state,ChatDetails) {
 
   $scope.add = function(add_jid){
     Chats.addNewRosterContact(add_jid);
-  };
+  };*/
 
 })

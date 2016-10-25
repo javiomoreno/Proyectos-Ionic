@@ -3,6 +3,8 @@
  */
 app.controller('ContactsCtrl', function($scope,Contacts,$state,ChatDetails) {
 
+  $scope.contacts = [];
+
   $scope.contacts = Contacts.allRoster();
 
   $scope.remove = function(contact) {
