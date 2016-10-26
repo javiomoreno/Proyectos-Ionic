@@ -9,7 +9,7 @@ app.controller('ChatDetailCtrl', function($scope, $timeout, $ionicScrollDelegate
   $scope.messages = [];
 
   $scope.to_id=ChatDetails.getTo();
-
+  
   $scope.messages = Chats.allRoster($scope.to_id);
 
   var isIOS = ionic.Platform.isIOS();

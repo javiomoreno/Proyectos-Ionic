@@ -34,37 +34,31 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 
 				  var d = new Date($(iq).find("chat").attr("start"));
 
-					$(iq).find("from").each(function(){
-            d.setSeconds(d.getSeconds() + $(this).attr("secs"));
-            var d2 = d.toLocaleTimeString().replace(/:\d+ /, ' ');
+				  var childrens = $(iq).find("chat").children();
 
-            if($(this).find("from")) {
-
-              ChatsObj.roster.push({
-                userId: $(this).attr("jid"),
-                text: $(this)[0].textContent,
-                d: d2
-              });
-            }
-					});
-
-          $(iq).find("to").each(function(){
-
-            d.setSeconds(d.getSeconds() + $(this).attr("secs"));
-            var d2 = d.toLocaleTimeString().replace(/:\d+ /, ' ');
-
-            ChatsObj.roster.push({
-              userId: sharedConn.getConnectObj().jid,
-              text:  $(this)[0].textContent,
-              d: d2
-            });
-
-          });
+				  childrens.each(function(){
+						d.setSeconds(d.getSeconds() + $(this).attr("secs"));
+						var d2 = d.toLocaleTimeString().replace(/:\d+ /, ' ');
+						console.log($(this));
+						if($(this)[0].localName == ("from")){
+							ChatsObj.roster.push({
+								userId: $(this).attr("jid"),
+								text: $(this)[0].textContent,
+								d: d2
+							});
+						}else if($(this)[0].localName == "to"){
+							ChatsObj.roster.push({
+							userId: sharedConn.getConnectObj().jid,
+							text:  $(this)[0].textContent,
+							d: d2
+							});
+						}
+				  });
 
 				});
 
 		});
-    console.log(ChatsObj.roster);
+    	console.log(ChatsObj.roster);
 		return ChatsObj.roster;
 
 	}
