@@ -23,7 +23,7 @@ app.factory('ChatDetails', ['sharedConn','$rootScope', function(sharedConn,$root
 	  console.log("aqui lega: "+to_id+"@appchat.com")
 
     //var iq = $iq({type: 'get'}).c('list', {xmlns: 'urn:xmpp:archive'}).c('set', {xmlns: 'http://jabber.org/protocol/rs'});
-    var iq = $iq({type: 'get'}).c('retrieve', {xmlns: 'urn:xmpp:archive', with: ''+to_id+'@appchat.com'}).c('set', {xmlns: 'http://jabber.org/protocol/rsm'});
+    var iq = $iq({type: 'get'}).c('list', {xmlns: 'urn:xmpp:archive', with: ''+to_id+'@appchat.com'}).c('set', {xmlns: 'http://jabber.org/protocol/rsm'}).c('max', 100);
 
 		connection.sendIQ(iq,
 			function(iq) {

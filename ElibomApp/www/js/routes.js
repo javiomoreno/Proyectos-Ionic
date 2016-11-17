@@ -15,22 +15,22 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
     // Each tab has its own nav history stack:
 
-    .state('tab.dash', {
-      url: '/dash',
+    .state('tab.home', {
+      url: '/home',
       views: {
-        'tab-dash': {
-          templateUrl: 'templates/tab-dash.html',
-          controller: 'DashCtrl'
+        'tab-home': {
+          templateUrl: 'templates/tab-home.html',
+          controller: 'HomeCtrl'
         }
       }
     })
 
-    .state('tab.chats', {
-      url: '/chats',
+    .state('tab.services', {
+      url: '/services',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
+        'tab-services': {
+          templateUrl: 'templates/tab-services.html',
+          controller: 'ServicesCtrl'
         }
       }
     })
@@ -44,23 +44,39 @@ app.config(function($stateProvider, $urlRouterProvider) {
       }
     })
 
-    .state('tab.account', {
-      url: '/account',
+    .state('tab.contact', {
+      url: '/contact',
       views: {
-        'tab-account': {
-          templateUrl: 'templates/tab-account.html',
-          controller: 'AccountCtrl'
+        'tab-contact': {
+          templateUrl: 'templates/tab-contact.html',
+          controller: 'ContactCtrl'
         }
       }
     })
 
-    .state('home', {
-      url: '/home',
-      templateUrl: 'templates/home.html',
-      controller: 'HomeCtrl'
+    .state('tab.logout', {
+      url: '/logout',
+      views: {
+        'tab-logout': {
+          templateUrl: 'templates/tab-logout.html',
+          controller: 'LogoutCtrl'
+        }
+      }
+    })
+
+    .state('login', {
+      url: '/login',
+      templateUrl: 'templates/login.html',
+      controller: 'LoginCtrl'
+    })
+
+    .state('index', {
+      url: '/index',
+      templateUrl: 'templates/index.html',
+      controller: 'IndexCtrl'
     });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('home');
+  $urlRouterProvider.otherwise('index');
 
 });
